@@ -1,0 +1,12 @@
+services:
+  db:
+    image: 'ankane/pgvector'
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: movie-whisperer
+    volumes:
+      - ./database:/var/lib/postgresql/data
