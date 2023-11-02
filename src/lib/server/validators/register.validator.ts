@@ -1,8 +1,9 @@
-import { boolean, object, string } from 'zod';
+import { object, string } from 'zod';
 import { error } from '@sveltejs/kit';
 import { ZodError } from 'zod';
 
 const schema = object({
+	name: string({ required_error: 'A name is required' }),
 	email: string({ required_error: 'An email is required' }).email({
 		message: 'This email is invalid'
 	}),

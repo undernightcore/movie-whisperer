@@ -5,11 +5,12 @@ import { prisma } from '$lib/server/services/prisma.service';
 import { hashPassword } from '$lib/server/helpers/bcrypt.helper';
 
 export const POST: RequestHandler = async ({ request }) => {
-	const alreadyRegistered = Boolean(await prisma.user.count());
-	if (alreadyRegistered) throw error(400, 'There is already an admin created');
+	const { name, email, password } = validateRegisterRequest(await request.json());
 
-	const { email, password } = validateRegisterRequest(await request.json());
-	await prisma.user.create({ data: { email, password: await hashPassword(password) } });
+	const user = await prisma.user.findUnique({ where: { email } });
+	if (user) throw error(400, 'You already have an account');
 
-	return json({ message: 'Admin created successfully' });
+	await prisma.user.create({ data: { name, email, password: await hashPassword(password) } });
+
+	return json({ message: 'Welcome to Movie Whisper! Please log in!' });
 };

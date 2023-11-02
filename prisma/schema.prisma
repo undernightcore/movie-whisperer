@@ -11,7 +11,36 @@ datasource db {
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  email    String @unique
-  password String
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique
+  password   String
+  Interested Interested[]
+}
+
+model Interested {
+  id      Int    @id @default(autoincrement())
+  user    User   @relation(fields: [userId], references: [id])
+  userId  Int
+  movie   Movie  @relation(fields: [movieId], references: [id])
+  movieId String
+}
+
+model Movie {
+  id         String       @id
+  title      String
+  plot       String
+  poster     String
+  backdrop   String
+  rating     Int
+  release    DateTime
+  duration   Int
+  category   Category[]
+  Interested Interested[]
+}
+
+model Category {
+  id     Int     @id
+  title  String
+  movies Movie[]
 }
