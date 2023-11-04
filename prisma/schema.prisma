@@ -19,24 +19,27 @@ model User {
 }
 
 model Interested {
-  id      Int    @id @default(autoincrement())
-  user    User   @relation(fields: [userId], references: [id])
+  id      Int   @id @default(autoincrement())
+  user    User  @relation(fields: [userId], references: [id])
   userId  Int
-  movie   Movie  @relation(fields: [movieId], references: [id])
-  movieId String
+  movie   Movie @relation(fields: [movieId], references: [id])
+  movieId Int
 }
 
 model Movie {
-  id         String       @id
+  id         Int          @id
   title      String
   plot       String
-  poster     String
-  backdrop   String
+  poster     String?
+  backdrop   String?
   rating     Int
-  release    DateTime
+  release    DateTime?
   duration   Int
   category   Category[]
   Interested Interested[]
+
+  content String
+  vector  Unsupported("vector")?
 }
 
 model Category {
