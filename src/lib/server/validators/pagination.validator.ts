@@ -9,10 +9,9 @@ const schema = object({
 	).default(1),
 	perPage: preprocess(
 		(value) => Number(value),
-		number({ invalid_type_error: 'perPage should be a number' }).min(
-			1,
-			'perPage should be at least 1'
-		)
+		number({ invalid_type_error: 'perPage should be a number' })
+			.min(1, 'perPage should be at least 1')
+			.max(100, 'You can only request 100 movies at a time')
 	).default(20)
 });
 

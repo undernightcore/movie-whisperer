@@ -25,6 +25,8 @@ model Interested {
   userId  Int
   movie   Movie @relation(fields: [movieId], references: [id])
   movieId Int
+
+  @@unique([userId, movieId])
 }
 
 model Movie {
