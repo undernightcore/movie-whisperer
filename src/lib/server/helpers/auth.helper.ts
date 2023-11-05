@@ -14,3 +14,18 @@ export async function getAuthenticatedUser({ headers }: Request) {
 	if (!user) throw error(400, 'This user does not exist');
 	return user;
 }
+
+export async function getOptionalUser({ headers }: Request) {
+	const authHeader = headers.get('Authorization') ?? '';
+	const token = authHeader.substring(7);
+
+	if (!token) return null;
+
+	const userId = getUserIdFromJwt(token);
+	if (userId === null) return null;
+
+	const user = await prisma.user.findUnique({ where: { id: userId } });
+	if (!user) return null;
+
+	return user;
+}
