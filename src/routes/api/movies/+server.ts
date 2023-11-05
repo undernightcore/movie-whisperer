@@ -1,17 +1,26 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { json } from '@sveltejs/kit';
-import { getVectorStore } from '$lib/server/helpers/vector.helper';
+import { validatePaginationParams } from '$lib/server/validators/pagination.validator';
 import { prisma } from '$lib/server/services/prisma.service';
+import { json } from '@sveltejs/kit';
+import { validateCategoryParam } from '$lib/server/validators/category.validator';
+import { excludeProperties } from '$lib/server/helpers/object.helper';
 
 export const GET: RequestHandler = async ({ url }) => {
-	const search = url.searchParams.get('search');
+	const search = url.searchParams.get('search') ?? undefined;
+	const category = validateCategoryParam(url.searchParams.get('category'));
+	const { perPage, page } = validatePaginationParams(Object.fromEntries(url.searchParams));
 
-	const vector = getVectorStore();
-
-	const movieIds = await vector.similaritySearch(search ?? '', 20);
 	const movies = await prisma.movie.findMany({
-		where: { id: { in: movieIds.map((movie) => movie.metadata.id) } }
+		take: perPage,
+		skip: (page - 1) * perPage,
+		where: {
+			title: { contains: search, mode: 'insensitive' },
+			category: { some: { id: { in: category ? [category] : undefined } } }
+		},
+		include: { category: true }
 	});
 
-	return json(movies);
+	return json(
+		movies.map((movie) => excludeProperties(movie, ['backdrop', 'duration', 'content', 'plot']))
+	);
 };
