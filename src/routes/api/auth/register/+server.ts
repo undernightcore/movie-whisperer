@@ -10,7 +10,11 @@ export const POST: RequestHandler = async ({ request }) => {
 	const user = await prisma.user.findUnique({ where: { email } });
 	if (user) throw error(400, 'You already have an account');
 
-	await prisma.user.create({ data: { name, email, password: await hashPassword(password) } });
+	const isFirstUser = !(await prisma.user.count());
+
+	await prisma.user.create({
+		data: { name, email, password: await hashPassword(password), admin: isFirstUser }
+	});
 
 	return json({ message: 'Welcome to Movie Whisper! Please log in!' });
 };

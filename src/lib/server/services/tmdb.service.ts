@@ -13,6 +13,11 @@ class TmdbService {
 		const today = DateTime.now().toFormat('MM_dd_yyyy');
 		const response = await fetch(`${this.#exportUrl}_${today}.json.gz`);
 
+		if (!response.ok)
+			throw new Error(
+				'Fetching movies from TMDB failed. They might not have published today movie list yet.'
+			);
+
 		const uncompressed = await ungzip(await response.arrayBuffer());
 		return uncompressed
 			.toString()
