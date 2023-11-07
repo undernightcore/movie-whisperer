@@ -2,6 +2,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { error, json } from '@sveltejs/kit';
 import { getVectorStore } from '$lib/server/helpers/vector.helper';
 import { prisma } from '$lib/server/services/prisma.service';
+import { excludeProperties } from '$lib/server/helpers/object.helper';
 
 export const GET: RequestHandler = async ({ url }) => {
 	const search = url.searchParams.get('search');
@@ -16,5 +17,5 @@ export const GET: RequestHandler = async ({ url }) => {
 		where: { id: { in: movieIds.map((movie) => movie.metadata.id) } }
 	});
 
-	return json(movies);
+	return json(movies.map((movie) => excludeProperties(movie, ['backdrop', 'duration', 'content'])));
 };
