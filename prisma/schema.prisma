@@ -33,7 +33,7 @@ model Movie {
   id         Int          @id
   title      String
   plot       String
-  poster     String?
+  poster     String
   backdrop   String?
   rating     Int
   release    DateTime?

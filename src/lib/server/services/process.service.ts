@@ -60,7 +60,7 @@ class ProcessService {
 
 			const fetchingMovies = await Promise.all(
 				moviesToProcess.map((movie) => tmdb.getMovieDetails(movie))
-			).then((details) => details.filter((detail) => detail.overview));
+			).then((details) => details.filter((detail) => detail.overview && detail.poster_path));
 
 			const saved = await prisma.$transaction(
 				fetchingMovies
