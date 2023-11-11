@@ -1,12 +1,14 @@
 services:
   app:
-    build: .
+    image: 'ghcr.io/undernightcore/movie-whisperer'
     environment:
       DATABASE_URL: postgresql://user:password@db:5432/movie-whisperer?schema=public
       APP_SECRET_KEY: random-secret-key
       TMDB_API_KEY: your-apikey-here
     ports:
       - 80:3000
+    depends_on:
+      - db
   db:
     image: 'ankane/pgvector'
     restart: unless-stopped
