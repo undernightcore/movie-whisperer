@@ -4,6 +4,8 @@
 	import Button from '$lib/components/b-button.svelte';
 	import { buildCoverUrl } from '$lib/utils/image.utils';
 	import type { MovieInterface } from '$lib/interfaces/movie.interface';
+	import { goto } from '$app/navigation';
+	import { getLatestPrompt } from '$lib/services/movie.service';
 
 	let movie: MovieInterface;
 
@@ -19,6 +21,11 @@
 		movie = (await response.json()) as MovieInterface;
 		console.log(movie);
 	}
+
+	function goBack() {
+		const previousPrompt = getLatestPrompt();
+		goto(previousPrompt ? `/recommend?search=${previousPrompt}` : '/');
+	}
 </script>
 
 {#if movie}
@@ -30,7 +37,7 @@
 					({new Date(movie.release).getFullYear()})
 				{/if}
 			</h1>
-			<Button text="Back to list" button={true} />
+			<Button on:click={goBack} text="Back to list" button={true} />
 		</div>
 		<div class="movie__content">
 			<img alt="movie cover" src={buildCoverUrl(movie.poster)} />

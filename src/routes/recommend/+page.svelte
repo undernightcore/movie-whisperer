@@ -6,6 +6,7 @@
 	import Spinner from '$lib/components/spinner.svelte';
 	import { buildCoverUrl } from '$lib/utils/image.utils';
 	import type { MovieSimpleInterface } from '$lib/interfaces/movie.interface';
+	import { getRecommendedMovies } from '$lib/services/movie.service';
 
 	const search = $page.url.searchParams.get('search');
 
@@ -15,15 +16,12 @@
 		if (search) {
 			getMovies(search);
 		} else {
-			goto('/')
-		};
-		
+			goto('/');
+		}
 	});
 
 	async function getMovies(search: string) {
-		const response = await fetch(`/api/movies/recommend?search=${search}`);
-		if (!response.ok) return;
-		movies = await response.json();
+		movies = await getRecommendedMovies(search);
 	}
 </script>
 
