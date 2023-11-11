@@ -5,7 +5,7 @@
 
 <button on:click>
 	{#if button}
-		<img alt="back icon" src="back.png" />
+		<img alt="back icon" src="/back.png" />
 	{/if}
 	{text}
 </button>
@@ -22,7 +22,7 @@
 		align-items: center;
 		justify-content: center;
 
-		height: fit-content;
+		height: 28px;
 		width: fit-content;
 		background-color: var(--primary-color);
 

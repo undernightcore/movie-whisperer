@@ -28,6 +28,7 @@
 
 		font-family: Inter, sans-serif;
 		color: var(--primary-color);
+		background-color: var(--secondary-color);
 
 		height: 100%;
 		overflow: auto;

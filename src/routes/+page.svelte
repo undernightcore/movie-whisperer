@@ -17,7 +17,6 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-		background-color: var(--secondary-color);
 		height: 100%;
 		width: 100%;
 
