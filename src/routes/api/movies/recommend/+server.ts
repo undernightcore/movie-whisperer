@@ -17,5 +17,5 @@ export const GET: RequestHandler = async ({ url }) => {
 		where: { id: { in: movieIds.map((movie) => movie.metadata.id) } }
 	});
 
-	return json(movies.map((movie) => excludeProperties(movie, ['backdrop', 'duration', 'content'])));
+	return json(movies.map((movie) => excludeProperties(movie, ['backdrop', 'duration'])));
 };
