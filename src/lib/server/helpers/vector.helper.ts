@@ -11,7 +11,7 @@ export function getVectorStore() {
 		vectorColumnName: 'vector',
 		columns: {
 			id: PrismaVectorStore.IdColumn,
-			content: PrismaVectorStore.ContentColumn
+			plot: PrismaVectorStore.ContentColumn
 		}
 	});
 }

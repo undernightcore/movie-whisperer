@@ -1,7 +1,6 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { error, json } from '@sveltejs/kit';
 import { prisma } from '$lib/server/services/prisma.service';
-import { excludeProperties } from '$lib/server/helpers/object.helper';
 import { getOptionalUser } from '$lib/server/helpers/auth.helper';
 
 export const GET: RequestHandler = async ({ request, params }) => {
@@ -21,5 +20,5 @@ export const GET: RequestHandler = async ({ request, params }) => {
 		? Boolean(await prisma.interested.findFirst({ where: { userId: user.id, movieId } }))
 		: false;
 
-	return json({ ...excludeProperties(movie, ['content']), inWatchlist });
+	return json({ ...movie, inWatchlist });
 };

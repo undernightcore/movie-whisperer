@@ -41,8 +41,7 @@ model Movie {
   category   Category[]
   Interested Interested[]
 
-  content String
-  vector  Unsupported("vector")?
+  vector Unsupported("vector")?
 }
 
 model Category {

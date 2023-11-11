@@ -7,9 +7,8 @@ export class VectorMovieModel implements Movie {
 	backdrop: string | null;
 	plot: string;
 	title: string;
-	content: string;
 	duration: number;
-	poster: string | null;
+	poster: string;
 	release: Date | null;
 	rating: number;
 	category: { connect: { id: number }[] };
@@ -17,11 +16,10 @@ export class VectorMovieModel implements Movie {
 	constructor(data: MovieDetailsInterface) {
 		this.id = data.id;
 		this.backdrop = data.backdrop_path;
-		this.content = `${data.overview}`;
 		this.plot = data.overview;
 		this.duration = data.runtime;
 		this.title = data.title;
-		this.poster = data.poster_path;
+		this.poster = data.poster_path ?? '';
 		this.rating = data.vote_average;
 		this.category = { connect: data.genres.map(({ id }) => ({ id })) };
 		this.release = data.release_date
