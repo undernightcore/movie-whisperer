@@ -6,14 +6,14 @@
 ### How it works
 Movie Whisperer uses **SvelteKit, Langchain, PGVector** and **Transformers** to build a **movies database** that can be **queried using vector similarity search**.
 
-⚠ Movies from TMDB's API **must** be preprocessed using a text embeddings model and inserted into the database ⚠
+⚠ Movies from TMDB's API **must** be [preprocessed](#feed-the-movies-database) before querying ⚠
 
 ### Demo 
 **Feel free** to use this [test server](https://movies.puntaserver.com) to do your searches but please, **be responsible**, **do not flood it with requests** since the **text embeddings model used** for retrieval **can be quite power hungry**.
 
 ### How to run it locally
 
-#### Put your **TMDB API key** and **DB connection** string in a **.env** file
+Put your **TMDB API key** and **DB connection** string in a **.env** file
 
 ```
 DATABASE_URL="postgresql://user:password@localhost:5432/movie-whisperer?schema=public"
@@ -21,19 +21,19 @@ APP_SECRET_KEY="example"
 TMDB_API_KEY="yourapikeyhere"
 ```
 
-#### Install dependencies
+Install dependencies
 
 ```bash
 npm install
 ```
 
-#### Apply migrations to your database
+Apply migrations to your database
 
 ```bash
 npx prisma migrate dev
 ```
 
-#### Run the app
+Run the app
 
 ```bash
 npm run dev
