@@ -1,38 +1,50 @@
-# create-svelte
+# Movie Whisperer
+### 🎬 Get movie recommendations based in a prompt 🎬
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+![Image](static/movie-whisperer.jpg)
 
-## Creating a project
+### How it works
+Movie Whisperer uses **SvelteKit, Langchain, PGVector** and **Transformers** to build a **movies database** that can be **queried using vector similarity search**.
 
-If you're seeing this, you've probably already done this step. Congrats!
+⚠ Movies from TMDB's API **must** be preprocessed using a text embeddings model and inserted into the database ⚠
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+### Demo 
+**Feel free** to use this [test server](https://movies.puntaserver.com) to do your searches but please, **be responsible**, **do not flood it with requests** since the **text embeddings model used** for retrieval **can be quite power hungry**.
 
-# create a new project in my-app
-npm create svelte@latest my-app
+### How to run it locally
+
+#### Put your **TMDB API key** and **DB connection** string in a **.env** file
+
+```
+DATABASE_URL="postgresql://user:password@localhost:5432/movie-whisperer?schema=public"
+APP_SECRET_KEY="example"
+TMDB_API_KEY="yourapikeyhere"
 ```
 
-## Developing
+#### Install dependencies
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+```bash
+npm install
+```
+
+#### Apply migrations to your database
+
+```bash
+npx prisma migrate dev
+```
+
+#### Run the app
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+### Run using docker compose
 
-To create a production version of your app:
+You can **run the app using my docker image** used in the **docker-compose.prod.yml** file. It is very important to **put your TMDB API key in the docker compose file**.
 
-```bash
-npm run build
-```
+### Feed the movies database
 
-You can preview the production build with `npm run preview`.
+Use the `POST /api/auth/register` and `POST /api/auth/login` to **create an admin account** (only the **first account** created **has the admin role**)
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Use the `POST /api/process` endpoint to **start processing movies**, then you can use the `GET /api/process/status` to **check the remaining movies** to be processed.
