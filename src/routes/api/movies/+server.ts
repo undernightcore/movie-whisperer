@@ -20,7 +20,5 @@ export const GET: RequestHandler = async ({ url }) => {
 		include: { category: true }
 	});
 
-	return json(
-		movies.map((movie) => excludeProperties(movie, ['backdrop', 'duration', 'content', 'plot']))
-	);
+	return json(movies.map((movie) => excludeProperties(movie, ['backdrop', 'duration', 'plot'])));
 };
