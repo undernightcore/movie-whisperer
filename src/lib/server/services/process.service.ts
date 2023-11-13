@@ -51,7 +51,7 @@ class ProcessService {
 
 		const movies = await tmdb
 			.getAllMovieIds()
-			.then((ids) => ids.filter((id) => !localMovies.has(id)).slice(0, 100000));
+			.then((ids) => ids.slice(0, 100000).filter((id) => !localMovies.has(id)));
 
 		const vector = getVectorStore();
 
