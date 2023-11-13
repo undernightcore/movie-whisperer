@@ -1,5 +1,8 @@
 import { env } from '$env/dynamic/private';
-import type { MovieDetailsInterface } from '$lib/interfaces/movie-details.interface';
+import type {
+	MovieDetailsInterface,
+	MovieDumpInterface
+} from '$lib/interfaces/movie-details.interface';
 import type { GenreInterface } from '$lib/interfaces/genre.interface';
 import { DateTime } from 'luxon';
 import gzip from 'node-gzip';
@@ -24,7 +27,8 @@ class TmdbService {
 			.toString()
 			.split('\n')
 			.filter((data) => data)
-			.map((movie) => JSON.parse(movie))
+			.map((movie) => JSON.parse(movie) as MovieDumpInterface)
+			.sort((a, b) => b.popularity - a.popularity)
 			.map((movie) => movie.id);
 	}
 

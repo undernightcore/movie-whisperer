@@ -1,5 +1,13 @@
 import type { GenreInterface } from '$lib/interfaces/genre.interface';
 
+export interface MovieDumpInterface {
+	id: number;
+	original_title: string;
+	popularity: number;
+	video: boolean;
+	adult: boolean;
+}
+
 export interface MovieDetailsInterface {
 	id: number;
 	backdrop_path: string | null;
