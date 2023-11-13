@@ -67,7 +67,6 @@
 			display: flex;
 			flex-wrap: wrap;
 			overflow: auto;
-			justify-content: space-between;
 			gap: 32px;
 
 			padding-right: 16px;
