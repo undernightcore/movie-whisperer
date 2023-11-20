@@ -1,9 +1,9 @@
 import { env } from '$env/dynamic/private';
-import type {
-	MovieDetailsInterface,
-	MovieDumpInterface
-} from '$lib/interfaces/movie-details.interface';
 import type { GenreInterface } from '$lib/interfaces/genre.interface';
+import type {
+	TmdbMovieDetailsInterface,
+	TmdbMovieDumpInterface
+} from '$lib/interfaces/movie-details.interface';
 import { DateTime } from 'luxon';
 import gzip from 'node-gzip';
 const { ungzip } = gzip;
@@ -27,7 +27,7 @@ class TmdbService {
 			.toString()
 			.split('\n')
 			.filter((data) => data)
-			.map((movie) => JSON.parse(movie) as MovieDumpInterface)
+			.map((movie) => JSON.parse(movie) as TmdbMovieDumpInterface)
 			.sort((a, b) => b.popularity - a.popularity)
 			.map((movie) => movie.id);
 	}
@@ -37,7 +37,7 @@ class TmdbService {
 		return response.genres;
 	}
 
-	async getMovieDetails(movieId: number): Promise<MovieDetailsInterface> {
+	async getMovieDetails(movieId: number): Promise<TmdbMovieDetailsInterface> {
 		return this.#fetchApi(`/movie/${movieId}?language=en`);
 	}
 
@@ -45,6 +45,9 @@ class TmdbService {
 		const response = await fetch(`${this.#url}${path}`, {
 			headers: { authorization: `Bearer ${this.#key}` }
 		});
+
+		if (!response.ok)
+			throw new Error(`Something broke when calling TMDB! Status ${response.status}.`);
 
 		return response.json();
 	}
