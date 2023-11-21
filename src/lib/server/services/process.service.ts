@@ -3,6 +3,7 @@ import { tmdb } from '$lib/server/services/tmdb.service';
 import { getVectorStore } from '$lib/server/helpers/vector.helper';
 import { VectorMovieModel } from '$lib/server/models/vector-movie.model';
 import { sse } from '$lib/server/services/sse.service';
+import { omdb } from './omdb.service';
 
 class ProcessService {
 	#isCurrentlyProcessing = false;
@@ -62,10 +63,14 @@ class ProcessService {
 				moviesToProcess.map((movie) => tmdb.getMovieDetails(movie))
 			);
 
+			const betterPlots = omdb.isInitialized()
+				? await Promise.all(fetchingMovies.map(({ imdb_id }) => omdb.getLongerPlot(imdb_id)))
+				: [];
+
 			const saved = await prisma.$transaction(
 				fetchingMovies
 					.filter((detail) => detail.overview && detail.poster_path)
-					.map((movie) => new VectorMovieModel(movie))
+					.map((movie, index) => new VectorMovieModel(movie, betterPlots[index]))
 					.map((data) => prisma.movie.create({ data }))
 			);
 

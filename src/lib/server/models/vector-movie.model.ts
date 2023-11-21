@@ -1,5 +1,5 @@
+import type { TmdbMovieDetailsInterface } from '$lib/interfaces/movie-details.interface';
 import type { Movie } from '@prisma/client';
-import type { MovieDetailsInterface } from '$lib/interfaces/movie-details.interface';
 import { DateTime } from 'luxon';
 
 export class VectorMovieModel implements Movie {
@@ -13,10 +13,10 @@ export class VectorMovieModel implements Movie {
 	rating: number;
 	category: { connect: { id: number }[] };
 
-	constructor(data: MovieDetailsInterface) {
+	constructor(data: TmdbMovieDetailsInterface, extendedPlot: string | undefined) {
 		this.id = data.id;
 		this.backdrop = data.backdrop_path;
-		this.plot = data.overview;
+		this.plot = extendedPlot || data.overview;
 		this.duration = data.runtime;
 		this.title = data.title;
 		this.poster = data.poster_path ?? '';
