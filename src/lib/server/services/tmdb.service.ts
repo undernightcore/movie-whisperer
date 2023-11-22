@@ -14,13 +14,10 @@ class TmdbService {
 	#key = env.TMDB_API_KEY;
 
 	async getAllMovieIds(): Promise<number[]> {
-		const today = DateTime.now().toFormat('MM_dd_yyyy');
-		const response = await fetch(`${this.#exportUrl}_${today}.json.gz`);
+		const response = await this.#fetchBackwards(DateTime.now(), 5);
 
 		if (!response.ok)
-			throw new Error(
-				'Fetching movies from TMDB failed. They might not have published today movie list yet.'
-			);
+			throw new Error('Fetching movies from TMDB failed after 5 times. Check your API key.');
 
 		const uncompressed = await ungzip(await response.arrayBuffer());
 		return uncompressed
@@ -50,6 +47,15 @@ class TmdbService {
 			throw new Error(`Something broke when calling TMDB! Status ${response.status}.`);
 
 		return response.json();
+	}
+
+	async #fetchBackwards(date: DateTime, retries: number): Promise<Response> {
+		const formatDate = date.toFormat('MM_dd_yyyy');
+
+		const response = await fetch(`${this.#exportUrl}_${formatDate}.json.gz`);
+		const yesterday = date.minus({ day: 1 });
+
+		return !response.ok && retries > 0 ? this.#fetchBackwards(yesterday, retries - 1) : response;
 	}
 }
 
