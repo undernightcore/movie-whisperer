@@ -19,6 +19,7 @@ export interface TmdbMovieDetailsInterface {
 	runtime: number;
 	vote_average: number;
 	imdb_id: string;
+	popularity: number;
 }
 
 export interface OmdbMovieDetailsInterface {

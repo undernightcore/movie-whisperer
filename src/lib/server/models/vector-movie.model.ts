@@ -1,5 +1,6 @@
 import type { TmdbMovieDetailsInterface } from '$lib/interfaces/movie-details.interface';
 import type { Movie } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { DateTime } from 'luxon';
 
 export class VectorMovieModel implements Movie {
@@ -12,6 +13,7 @@ export class VectorMovieModel implements Movie {
 	release: Date | null;
 	rating: number;
 	category: { connect: { id: number }[] };
+	popularity: Prisma.Decimal;
 
 	constructor(data: TmdbMovieDetailsInterface, extendedPlot: string | undefined) {
 		this.id = data.id;
@@ -25,5 +27,6 @@ export class VectorMovieModel implements Movie {
 		this.release = data.release_date
 			? DateTime.fromFormat(data.release_date, 'yyyy-MM-dd').toJSDate()
 			: null;
+		this.popularity = new Prisma.Decimal(data.popularity);
 	}
 }

@@ -12,12 +12,12 @@ class ProcessService {
 		return this.#isCurrentlyProcessing;
 	}
 
-	async startProcessing() {
+	async startProcessing(amount: number) {
 		this.#isCurrentlyProcessing = true;
 
 		try {
 			await this.#processCategories();
-			await this.#processMovies();
+			await this.#processMovies(amount);
 		} catch (e) {
 			console.error(e);
 		}
@@ -45,14 +45,14 @@ class ProcessService {
 		await prisma.category.createMany({ data: remoteCategories });
 	}
 
-	async #processMovies() {
+	async #processMovies(amount: number) {
 		const localMovies = await prisma.movie
 			.findMany({ select: { id: true } })
 			.then((ids) => new Set(ids.map(({ id }) => id)));
 
 		const movies = await tmdb
 			.getAllMovieIds()
-			.then((ids) => ids.slice(0, 100000).filter((id) => !localMovies.has(id)));
+			.then((ids) => ids.slice(0, amount).filter((id) => !localMovies.has(id)));
 
 		const vector = getVectorStore();
 

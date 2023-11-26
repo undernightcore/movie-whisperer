@@ -38,6 +38,7 @@ model Movie {
   rating     Int
   release    DateTime?
   duration   Int
+  popularity Decimal      @default(0)
   category   Category[]
   Interested Interested[]
 
