@@ -18,6 +18,6 @@ export function getVectorStore() {
 
 export function getEmbeddings() {
 	return new HuggingFaceTransformersEmbeddings({
-		modelName: 'Xenova/all-MiniLM-L6-v2'
+		modelName: 'Xenova/all-mpnet-base-v2'
 	});
 }
