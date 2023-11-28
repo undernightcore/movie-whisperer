@@ -83,9 +83,6 @@ class ProcessService {
 			}
 
 			sse.sendMessage(JSON.stringify({ remaining: movies.length }));
-
-			// Just to throttle http requests to avoid being rate limited
-			await new Promise((resolve) => setTimeout(resolve, 200));
 		}
 	}
 }
